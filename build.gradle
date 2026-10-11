@@ -10,10 +10,16 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
     id 'jacoco'
+    id 'checkstyle'
 }
 
 jacoco {
     toolVersion = "0.8.15" // Check for latest version
+}
+
+checkstyle {
+    toolVersion = '10.12.4'
+    configFile = file('config/checkstyle/checkstyle.xml')
 }
 
 repositories {
@@ -22,6 +28,14 @@ repositories {
 }
 
 dependencies {
+    // The game provides this API at runtime; Gradle and the editor need it to compile.
+    def risingWorldHome = providers.gradleProperty('risingWorldHome')
+        .orElse(providers.environmentVariable('RISING_WORLD_HOME'))
+        .orElse('E:/Games/SteamLibrary/steamapps/common/RisingWorld')
+    compileOnly files("${risingWorldHome.get()}/data/SDK/PluginAPI.jar")
+    testImplementation files("${risingWorldHome.get()}/data/SDK/PluginAPI.jar")
+    testImplementation 'org.mockito:mockito-core:5.14.2'
+
     // This dependency is used by the application.
     implementation libs.guava
 }
@@ -48,6 +62,29 @@ jacocoTestReport {
     }
 }
 
+jacocoTestCoverageVerification {
+    dependsOn tasks.named('test'), tasks.named('jacocoTestReport')
+    violationRules {
+        rule {
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.95
+            }
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.95
+            }
+        }
+    }
+}
+
+// The build task runs check, which enforces Checkstyle and coverage thresholds.
+tasks.named('check') {
+    dependsOn tasks.named('jacocoTestCoverageVerification')
+}
+
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
@@ -59,3 +96,4 @@ application {
     // Define the main class for the application.
     mainClass = 'com.dgl.risingworld.RWWindowTrimming'
 }
+
