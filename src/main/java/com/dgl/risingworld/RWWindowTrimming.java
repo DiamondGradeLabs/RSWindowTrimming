@@ -3,12 +3,12 @@
  */
 package com.dgl.risingworld;
 
-public class RSWindowTrimming {
+public class RWWindowTrimming {
     public String getGreeting() {
         return "Hello World!";
     }
 
     public static void main(String[] args) {
-        System.out.println(new RSWindowTrimming().getGreeting());
+        System.out.println(new RWWindowTrimming().getGreeting());
     }
 }
