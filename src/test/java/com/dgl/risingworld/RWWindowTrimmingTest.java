@@ -6,9 +6,9 @@ package com.dgl.risingworld;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class RSWindowTrimmingTest {
+class RWWindowTrimmingTest {
     @Test void appHasAGreeting() {
-        RSWindowTrimming classUnderTest = new RSWindowTrimming();
+        RWWindowTrimming classUnderTest = new RWWindowTrimming();
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
     }
 }

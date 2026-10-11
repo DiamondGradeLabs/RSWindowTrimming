@@ -57,5 +57,5 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.dgl.risingworld.RSWindowTrimming'
+    mainClass = 'com.dgl.risingworld.RWWindowTrimming'
 }
